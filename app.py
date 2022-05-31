@@ -17,6 +17,7 @@ class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(50), nullable=False)
     body = db.Column(db.String(300), nullable=False)
+    tag = db.Column(db.String(20), nullable=False)
     create_at = db.Column(db.DateTime, nullable=False, default=datetime.now(pytz.timezone("Asia/Tokyo")))
 
 class User(UserMixin, db.Model):
@@ -49,8 +50,9 @@ def create():
     if request.method == "POST":
         title = request.form.get("title")
         body = request.form.get("body")
+        tag = request.form.get("tag")
 
-        post = Post(title=title, body=body)
+        post = Post(title=title, body=body, tag=tag)
 
         db.session.add(post)
         db.session.commit()
@@ -66,6 +68,7 @@ def update(id):
     else:
         post.title = request.form.get("title")
         post.body = request.form.get("body")
+        post.tag = request.form.get("tag")
         db.session.commit()
         return redirect("/")
 
